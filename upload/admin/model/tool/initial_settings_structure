@@ -1,0 +1,16 @@
+[ 
+    <name of sheet> : [
+        "skip_empty_lines" : <true or false or even skip this>,
+        "limit_lines" : <int or even skip this>,
+        "column_mapping" : [
+            "model" : [ "column":<int>, "initialline":<int> ], //required!
+            //following elements are not obligatory, but they should be defined completely if defined:
+            "article" : [ "column":<int>, "initialline":<int> ],
+            "upc" : [ "column":<int>, "initialline":<int> ],
+            "ean" : [ "column":<int>, "initialline":<int> ],
+            "jan" : [ "column":<int>, "initialline":<int> ],
+            "isbn" : [ "column":<int>, "initialline":<int> ],
+            
+        ]
+    ] 
+]
