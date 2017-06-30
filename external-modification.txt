@@ -1,0 +1,4 @@
+To install tool you would also need to modify such files in your website installation:
+/admin/controller/common/column_left.php
+/admin/language/ru-ru/common/column-left.php
+/admin/        /en-gb/
