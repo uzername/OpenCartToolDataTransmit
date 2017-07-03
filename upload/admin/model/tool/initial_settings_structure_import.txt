@@ -1,0 +1,88 @@
+//rowspan in column might correspond to same value for different positions
+//this structure corresponds to common layout when rows correspond to goods and columns correspond to parameters
+{ 
+    <name of sheet> : {
+        "skip_empty_lines" : <true or false or even skip this>,
+        "limit_lines" : <int or even skip this>, //number of lines to parse
+        "column_mapping" : {
+            //first tab
+            "name": { "column":<int>, "initialline":<int> }, //required!
+            "description": { "column":<int>, "initialline":<int> }, //possible to pick that from file. 
+                                                                    //In this case point out path to file (generalize the path if required)
+            
+            //second tab
+            "model" : { "column":<int>, "initialline":<int> }, //required!
+            //following elements are not obligatory, but they should be defined completely if defined:
+            "article" : { "column":<int>, "initialline":<int> },
+            "upc" : { "column":<int>, "initialline":<int> },
+            "ean" : { "column":<int>, "initialline":<int> },
+            "jan" : { "column":<int>, "initialline":<int> },
+            "isbn" : { "column":<int>, "initialline":<int> },
+            "mpn" : { "column":<int>, "initialline":<int> },
+            "location" : { "column":<int>, "initialline":<int> },
+            "price" : { "column":<int>, "initialline":<int> },
+            "tax" : { "column":<int>, "initialline":<int> }, 
+                               //tax is chosen from dropdown list in backend. It is linked to entity in db. look up as innerjoin
+            "goods_number"    : { "column":<int>, "initialline":<int> },
+            "min_quantity"    : { "column":<int>, "initialline":<int> },
+            "take_from_stock" : { "column":<int>, "initialline":<int> }, //boolean value
+            "inavailability"  : { "column":<int>, "initialline":<int> },
+            "shipment_required" : { "column":<int>, "initialline":<int> }, //boolean value
+            "SEO_URL" : { "column":<int>, "initialline":<int> }, //boolean value
+            "Supply_date" : { "column":<int>, "initialline":<int> },
+            "Size" : { "length":{ "column":<int>, "initialline":<int> }, "height":{ "column":<int>, "initialline":<int> }, "width":{ "column":<int>, "initialline":<int> } }
+                      //might be required to parse values
+            "weight" : { "column":<int>, "initialline":<int> },
+            "weight_measure" : { "column":<int>, "initialline":<int> }, //kg or something like this. might be required to perform join too with entities on db
+            "status" : { "column":<int>, "initialline":<int> }, //enabled or disabled
+            //third tab
+                       //these records are not required
+            "manufacturer" : { "column":<int>, "initialline":<int> },
+                    //no idea how to implement categories import. Depends on implementation in file
+                    //probable variants: 
+                    //   0. skip this option, define later, it is not required (the object might be null) 
+                    //   1. define using macroexpression syntax
+                    //   2. take info from one column (and optionally parse it by using specified char)
+            !!! POLYMORPHISM AND CAST MIGHT BE REQUIRED
+                   "categories": {"column_index":<int>, "delimiter":<char>} //point 2
+                         OR
+                   "categories": {"macroexpression":<string>} 
+                                //point 1
+                                //syntax: 
+            !!!            
+
+            "attributes" : {
+                    "common_attr_group": { "use":<bool> "name":<string> }  //place all attributes to user-defined attr group
+                    "lang_settings": //spread category names onto all languages
+                                     {  "use_one_language": <true or false>,
+                                     }, 
+                    !!! POLYMORPHISM AND CAST MIGHT BE REQUIRED
+                    "header_rows_general" : {"begin":<int>, "end":<int>}, //define a continuous span of columns
+                           OR
+                    "header_rows_general"      : {[<int>]} //define separate set of columns
+                           //is overriden by further declaration in attr_headers
+                    !!!
+                    "attr_headers" : [ 
+                            { 
+                              "language":<string>, //each header may be named differently in different languages. Overrides by "lang_settings" 
+                              "headers_rows"   : [<int>], 
+                                               //location of row(s) where the names of attributes are defined. 
+                                               //Concatenate cells' contents when number of rows >=2 (cell is defined as row + column)
+                              
+                            }
+                    ],
+                    !!! POLYMORPHISM AND CAST MIGHT BE REQUIRED
+                    "header_columns"      : {"begin":<int>, "end":<int>}, //define a continuous span of columns
+                            OR
+                    "header_columns"      : {[<int>]} //define separate set of columns
+                    !!!
+                    //there are many ways to import attribute groups. 
+                    //0. define by user
+                    //1. read from separate table, where 1st column is attr group, another is attr name
+                    //2. ...
+                    
+            }
+            
+        }
+    } 
+}
