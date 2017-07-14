@@ -2,6 +2,9 @@
 //this file is intended to implement business logic of XML import tool (and export tool too, some day)
 //written by example as of \admin\controller\tool\log.php
 //controller component of sndatatooltransmit: toss it to \admin\controller\tool\
+
+//Appropriate values of $data['the_stage'] :
+//'DEFAULT' - just started. 'AFTER_VALIDATION' - render button 
 class ControllerToolSndatatooltransmit extends Controller {
         //it is better to keep file processing routine here, because POST is being processed here
         //location of file
@@ -26,6 +29,7 @@ class ControllerToolSndatatooltransmit extends Controller {
                 $data['text_file_other'] = $this->language->get('text_file_other');
                 $data['text_file_resultscapt'] = $this->language->get('text_file_resultscapt');  
                 $data['text_file_remove_afteruse'] = $this->language->get('text_file_remove_afteruse');
+                $data['the_stage'] = 'DEFAULT'; //stage of transmission
                 
 		if (isset($this->session->data['error'])) {
 			$data['error_warning'] = $this->session->data['error'];
@@ -65,6 +69,7 @@ class ControllerToolSndatatooltransmit extends Controller {
 		
 		$this->document->setTitle($this->language->get('heading_title'));
 		$data = $this->basicDataArrayGeneration();                
+                $data['the_stage'] = 'DEFAULT';
 		$this->response->setOutput($this->load->view('tool/sndatatooltransmit', $data));
 	}
         /* KEEP THESE JUST FOR REFERENCE, REMOVE LATER, PROBABLY */
@@ -135,8 +140,10 @@ class ControllerToolSndatatooltransmit extends Controller {
                         $data['log_lines'][] = print_r($returnFromValidate,TRUE);
                         if ($returnFromValidate['xml_validation_passed']) {
                             $data['log_lines'][] = $this->language->get('log_validate_xml_structure_1');
+                            $data['the_stage'] = 'AFTER_VALIDATION';
                         } else {
                             $data['log_lines'][] = $this->language->get('log_validate_xml_structure_2');
+                            $data['the_stage'] = 'DEFAULT';
                         }
                     } else {
                         $data['log_lines'][] = $this->language->get('log_upload_failure'); /*"Возможная атака с помощью файловой загрузки!\n";*/
@@ -154,7 +161,9 @@ class ControllerToolSndatatooltransmit extends Controller {
             } else {
                 $data['log_lines'][] = "_POST=".json_encode($_POST);
                 $data['log_lines'][] = "upload tmp dir:".sys_get_temp_dir();
+                
             }
+            //render view template with updated data
             $this->response->setOutput($this->load->view('tool/sndatatooltransmit', $data));
         }
         

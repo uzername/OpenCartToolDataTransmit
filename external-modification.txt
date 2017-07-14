@@ -1,4 +1,24 @@
+This tool is intended to work on OC 2.3.0.2
 To install tool you would also need to modify such files in your website installation:
 /admin/controller/common/column_left.php
+      Seek a section called "//Tools", it starts from "$tool = array();". At the end of it, but before condition 
+      "if ($tool) {...}", paste this code.
+      //somename code begin			
+			if ($this->user->hasPermission('access', 'tool/sndatatooltransmit')) {
+				$tool[] = array(
+					'name'	   => $this->language->get('text_datatooltransmit'),
+					'href'     => $this->url->link('tool/sndatatooltransmit', 'token=' . $this->session->data['token'], true),
+					'children' => array()		
+				);
+			}			
+      //somename code end
 /admin/language/ru-ru/common/column-left.php
+      Paste somewhere this code:
+        //somename code begin
+            $_['text_datatooltransmit']          = 'Load from XML';
+        //somename code end
 /admin/language/en-gb/common/column-left.php
+      Paste somewhere this code:
+        //somename code begin
+            $_['text_datatooltransmit']          = 'Загрузка с XML';
+        //somename code end

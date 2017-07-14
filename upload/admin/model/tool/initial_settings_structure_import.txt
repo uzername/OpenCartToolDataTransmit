@@ -1,5 +1,6 @@
 //rowspan in column might correspond to same value for different positions
 //this structure corresponds to common layout when rows correspond to goods and columns correspond to parameters
+//there are a lot of options, so it might be useful to add posibility to load from file
 { 
     <name of sheet> : {
         "skip_empty_lines" : <true or false or even skip this>,
